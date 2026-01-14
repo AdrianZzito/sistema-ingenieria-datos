@@ -3,17 +3,20 @@ from dotenv import load_dotenv
 import os
 from dropboxAuth import downloadFile
 from etl import *
-
 import pandas as pd
 
+# Load environment variables
 load_dotenv()
 
+# Initialize Dropbox client with access token
 accessToken = os.getenv("DROPBOX_ACCESS_TOKEN")
 dbx = dropbox.Dropbox(accessToken)
 
+# Define Dropbox file paths
 dbxPathTarjetas = "/Tarjetas-2026-01-05.csv"
 dbxPathClientes = "/Clientes-2026-01-05.csv"
 
+# Define local download path
 localPath = "downloadedFiles"
 
 ## Download files from dropbox
@@ -44,7 +47,6 @@ CARD_NORMALIZERS = {
 
 # Get main file content
 for col in dfClients.items():
-    #content = col[1][0]
 
     # Get individual rows
     for content in col[1]:
@@ -53,6 +55,7 @@ for col in dfClients.items():
         fields = content.split(";")
         #print(fields)
 
+        # Get each field and normalize
         for field in fields:
             #print(clientHeaders[i])
             print(field)
