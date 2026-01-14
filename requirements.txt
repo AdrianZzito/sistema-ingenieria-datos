@@ -1,0 +1,3 @@
+pandas
+dropbox
+python-dotenv
