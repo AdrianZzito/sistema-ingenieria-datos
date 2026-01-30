@@ -1,3 +1,4 @@
 pandas
 dropbox
 python-dotenv
+mysql-connector-python

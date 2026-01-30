@@ -10,3 +10,4 @@ def downloadFile(dbx, dropboxPath, localPath):
         print(f"HTTP error downloading file: {e}")
     except dropbox.exceptions.ApiError as e:
         print(f"API error downloading file: {e.pathLookup}")
+        
