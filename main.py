@@ -11,9 +11,9 @@ import re
 # Load environment variables
 load_dotenv()
 
-# Initialize Dropbox client with access token
-accessToken = os.getenv("DROPBOX_ACCESS_TOKEN")
-dbx = dropbox.Dropbox(accessToken)
+# Initialize Dropbox client with refresh token
+refreshToken = os.getenv("DROPBOX_REFRESH_TOKEN")
+dbx = dropbox.Dropbox(refreshToken)
 
 # File pattern
 reTarjetas = re.compile(r"^Tarjetas-\d{4}-\d{2}-\d{2}\.csv$")
