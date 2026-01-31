@@ -4,7 +4,7 @@ import os
 from dropboxAuth import downloadFile
 from etl import *
 import pandas as pd
-from db import insertClient, insertCard
+from db import insertClient, insertCard, clientExists, cardExists
 import mysql.connector
 import re
 
@@ -149,8 +149,16 @@ def etl(file: pd.DataFrame, dfName):
             
             # Insert into database
             if dfName == "dfClients":
+                id = client.get("cod_cliente")
+                if clientExists(id):
+                    print(f"Client with code {id} already exists. Skipping insertion.")
+                    continue
                 insertClient(client)
             else:
+                id = card.get("cod_cliente")
+                if cardExists(id):
+                    print(f"Card with client code {id} already exists. Skipping insertion.")
+                    continue
                 insertCard(card)
     
     if dfName == "dfClients":

@@ -37,3 +37,18 @@ def insertCard(cardData):
     )
     cursor.execute(sql, val)
     db.commit()
+
+def clientExists(code):
+    cursor.execute(
+        "SELECT cod_cliente FROM clients WHERE cod_cliente = %s LIMIT 1",
+        (code,)
+    )
+    return cursor.fetchone() is not None
+
+
+def cardExists(code):
+    cursor.execute(
+        "SELECT cod_cliente_tarjeta FROM tarjetas WHERE cod_cliente_tarjeta = %s LIMIT 1",
+        (code,)
+    )
+    return cursor.fetchone() is not None
