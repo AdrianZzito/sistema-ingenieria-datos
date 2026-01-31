@@ -2,9 +2,9 @@ import dropbox
 from dotenv import load_dotenv
 import os
 from dropboxAuth import downloadFile
-from etl import *
+from normalizers import *
 import pandas as pd
-from db import insertClient, insertCard, clientExists, cardExists
+from db import *
 import mysql.connector
 import re
 
