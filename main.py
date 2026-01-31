@@ -15,20 +15,38 @@ load_dotenv()
 accessToken = os.getenv("DROPBOX_ACCESS_TOKEN")
 dbx = dropbox.Dropbox(accessToken)
 
+# File pattern
+reTarjetas = re.compile(r"^Tarjetas-\d{4}-\d{2}-\d{2}\.csv$")
+reClientes = re.compile(r"^Clientes-\d{4}-\d{2}-\d{2}\.csv$")
+
+# List Dropbox files
+entries = dbx.files_list_folder("").entries
+
+# Search for files matching the patterns
+tarjetas = next(e.name for e in entries if reTarjetas.match(e.name))
+clientes = next(e.name for e in entries if reClientes.match(e.name))
+
 # Define Dropbox file paths
-dbxPathTarjetas = "/Tarjetas-2026-01-05.csv"
-dbxPathClientes = "/Clientes-2026-01-05.csv"
+dbxPathTarjetas = f"/{tarjetas}"
+dbxPathClientes = f"/{clientes}"
 
 # Define local download path
 localPath = "downloadedFiles"
+localTarjetas = f"{localPath}/{tarjetas}"
+localClientes = f"{localPath}/{clientes}"
+
+# Delete old files in local download directory
+for file in os.listdir(localPath):
+    if file.endswith(".csv"):
+        os.remove(os.path.join(localPath, file))
 
 ## Download files from dropbox
-downloadFile(dbx, dbxPathTarjetas, f"{localPath}/Tarjetas-2026-01-05.csv") # Comment to avoid downloading cards file
-downloadFile(dbx, dbxPathClientes, f"{localPath}/Clientes-2026-01-05.csv") # Comment to avoid downloading clients file
+downloadFile(dbx, dbxPathTarjetas, localTarjetas) # Comment to avoid downloading cards file
+downloadFile(dbx, dbxPathClientes, localClientes) # Comment to avoid downloading clients file
 
 # Read CSV files into DataFrames
-dfClients = pd.read_csv(f"{localPath}/Clientes-2026-01-05.csv", sep=";", encoding='latin1', dtype=str, engine='python')
-dfCards = pd.read_csv(f"{localPath}/Tarjetas-2026-01-05.csv", sep=";", encoding='latin1', dtype=str, engine='python')
+dfClients = pd.read_csv(localClientes, sep=";", encoding='latin1', dtype=str, engine='python')
+dfCards = pd.read_csv(localTarjetas, sep=";", encoding='latin1', dtype=str, engine='python')
 
 # Get client headers
 clientHeaders = dfClients.columns[0].split(";")
