@@ -13,7 +13,11 @@ load_dotenv()
 
 # Initialize Dropbox client with refresh token
 refreshToken = os.getenv("DROPBOX_REFRESH_TOKEN")
-dbx = dropbox.Dropbox(refreshToken)
+dbx = dropbox.Dropbox(
+    oauth2_refresh_token=refreshToken,
+    app_key=os.getenv("DROPBOX_APP_KEY"),
+    app_secret=os.getenv("DROPBOX_APP_SECRET")
+)
 
 # File pattern
 reTarjetas = re.compile(r"^Tarjetas-\d{4}-\d{2}-\d{2}\.csv$")
