@@ -114,7 +114,7 @@ def etl(file: pd.DataFrame, dfName):
                 else:
                     normFn = CARD_NORMALIZERS[cardHeaders[i]]
 
-                # Check is name field is valid
+                # Check if name field is valid
                 if dfName == "dfClients" and clientHeaders[i] == "nombre":
                     if not re.fullmatch(nameRegex, field):
                         validRow = False

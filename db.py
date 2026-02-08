@@ -50,7 +50,7 @@ def clientExists(code):
 
 def cardExists(cardNumber):
     cursor.execute("SELECT numero_tarjeta FROM tarjetas")
-    rows = cursor.fetchall()  # lista de tuplas [(hash,), (hash,), ...]
+    rows = cursor.fetchall()
 
     if not rows:  # lista vacía => no hay tarjetas
         print("No cards in DB.")
@@ -60,7 +60,7 @@ def cardExists(cardNumber):
     for (hashed,) in rows:
         try:
             if ph.verify(hashed, cardNumber):
-                print("Card exists. Skipping insertion.")
+                #print("Card exists. Skipping insertion.")
                 return True
         except VerifyMismatchError:
             continue  # no coincide, seguimos probando
