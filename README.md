@@ -1,4 +1,4 @@
-# Sistema de ingeniería de datos (ETL Dropbox → MySQL)
+# Sistema de ingeniería de datos
 
 Proyecto en Python que descarga archivos CSV desde Dropbox, normaliza datos de clientes y tarjetas, y los inserta en una base de datos MySQL evitando duplicados.
 
