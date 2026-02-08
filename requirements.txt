@@ -3,3 +3,4 @@ dropbox
 python-dotenv
 mysql-connector-python
 pytest
+argon2-cffi

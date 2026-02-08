@@ -1,6 +1,7 @@
 import pytest
 import os
 import sys
+from argon2 import PasswordHasher
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
@@ -35,8 +36,10 @@ def testNormPhoneFormat():
     assert normPhone(" (123) 456-7890 ") == "1234567890"
 
 # normCardNumber test cases
-def testNormCardNumberAnonymize():
-    assert normCardNumber(" 1234 5678 9012 3456 ") == "************3456"
+def testNormCardNumberHash():
+    raw = "1234567890123456"
+    hashed = normCardNumber(" 1234 5678 9012 3456 ")
+    assert PasswordHasher().verify(hashed, raw)
 
 # normCVV test cases
 def testNormCVVAnonymize():

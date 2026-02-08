@@ -1,6 +1,8 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 
 load_dotenv()
 
@@ -46,9 +48,25 @@ def clientExists(code):
     return cursor.fetchone() is not None
 
 
-def cardExists(code):
-    cursor.execute(
-        "SELECT cod_cliente_tarjeta FROM tarjetas WHERE cod_cliente_tarjeta = %s LIMIT 1",
-        (code,)
-    )
-    return cursor.fetchone() is not None
+def cardExists(cardNumber):
+    cursor.execute("SELECT numero_tarjeta FROM tarjetas")
+    rows = cursor.fetchall()  # lista de tuplas [(hash,), (hash,), ...]
+
+    if not rows:  # lista vacía => no hay tarjetas
+        print("No cards in DB.")
+        return False
+
+    ph = PasswordHasher()
+    for (hashed,) in rows:
+        try:
+            if ph.verify(hashed, cardNumber):
+                print("Card exists. Skipping insertion.")
+                return True
+        except VerifyMismatchError:
+            continue  # no coincide, seguimos probando
+        except Exception as e:
+            print("Verification error:", e)
+            continue
+
+    print("Card not found. Proceeding with insertion.")
+    return False

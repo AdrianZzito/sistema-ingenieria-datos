@@ -99,6 +99,7 @@ def etl(file: pd.DataFrame, dfName):
             i = 0
             client = {}
             card = {}
+            raw_card_number = None
 
             validRow = True
 
@@ -120,6 +121,9 @@ def etl(file: pd.DataFrame, dfName):
                         break
                     else:
                         validRow = True
+
+                if dfName == "dfCards" and cardHeaders[i] == "numero_tarjeta":
+                    raw_card_number = normCardNumberRaw(field)
 
                 # Normalize field
                 normField = normFn(field)
@@ -155,9 +159,11 @@ def etl(file: pd.DataFrame, dfName):
                     continue
                 insertClient(client)
             else:
-                id = card.get("cod_cliente")
-                if cardExists(id):
-                    print(f"Card with client code {id} already exists. Skipping insertion.")
+                if raw_card_number is None:
+                    print("Card number missing. Skipping insertion.")
+                    continue
+                if cardExists(raw_card_number):
+                    print(f"Card with number {raw_card_number} already exists. Skipping insertion.")
                     continue
                 insertCard(card)
     
