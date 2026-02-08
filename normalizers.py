@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+from argon2 import PasswordHasher
 
 def normCapital(s):
     return s.strip().title()
@@ -21,10 +22,14 @@ def normEmail(s):
 def normPhone(s):
     return s.strip().replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
 
+def normCardNumberRaw(s):
+    return s.strip().upper().replace(" ", "")
+
 def normCardNumber(s):
-    s = s.strip().upper().replace(" ", "")
-    anon = "************" + s[12:16]
-    return anon
+    s = normCardNumberRaw(s)
+    ph = PasswordHasher()
+    res = ph.hash(s)
+    return res
 
 def normCVV(s):
     s = s.strip().upper().replace(" ", "")
